@@ -34,7 +34,7 @@ host  all  all  {{host}}  password
 host  all  all  {{host}}  trust
 {% endfor %}
 
-# User custom
+# IDC Specific Entries
 {% for connection in postgresql_pg_hba_custom %}
 # {{connection.comment}}
 {{connection.type}}  {{connection.database}}  {{connection.user}}  {{connection.address}}  {{connection.method}}  {{connection.options|default("")}}

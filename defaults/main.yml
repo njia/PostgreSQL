@@ -2,7 +2,7 @@
 # defaults file for PostgreSQL
 
 # Basic settings
-postgresql_version: 9.3
+postgresql_version: 9.4
 postgresql_encoding: 'UTF-8'
 postgresql_locale: 'en_US.UTF-8'
 
@@ -24,10 +24,10 @@ postgresql_databases: []                # Override when needed, usage as shown b
         #        hstore: yes            # flag to install the hstore extensions on this database (yes/no)
 
 # List of users to be created (optional)
-postgresql_users: []                    # Override when needed, usage as shown below
-        #      - name: dbuser           # Username
-        #        pass: passw0rd         # User password
-        #        encrypted: no          # Is password already encrypted (yes/no)
+postgresql_users:                       # Override when needed, usage as shown below
+  - name: postgres                      # Username
+    pass: password                      # User password
+    encrypted: no                       # Is password already encrypted (yes/no)
 
 # List of user privileges to be applied (optional)
 postgresql_user_privileges: []          # Override when needed, usage as shown below
@@ -50,9 +50,16 @@ postgresql_pg_hba_default:
   - { type: host,  database: all, user: all, address: '127.0.0.1/32', method: '{{ ipv4_postgresql_default_auth_method }}', comment: 'IPv4 local connections:' }
   - { type: host,  database: all, user: all, address: '::1/128',      method: '{{ ipv6_postgresql_default_auth_method }}', comment: 'IPv6 local connections:' }
 
-postgresql_pg_hba_passwd_hosts: []
+postgresql_pg_hba_passwd_hosts:
+  - 10.170.0.0/16
+  - 172.22.0.0/16
+  - 172.24.0.0/16
 postgresql_pg_hba_trust_hosts: []
-postgresql_pg_hba_custom: []
+postgresql_pg_hba_custom:
+  - { type: host, database: clientadmin, user: casuser,    address: 172.22.0.0/16, method: trust, comment: '' }
+  - { type: host, database: clientadmin, user: casuser,    address: 172.24.0.0/16, method: trust, comment: '' }
+  - { type: host, database: clientadmin, user: casuser_ro, address: 172.22.0.0/16, method: trust, comment: '' }
+  - { type: host, database: clientadmin, user: casuser_ro, address: 172.24.0.0/16, method: trust, comment: '' }
 
 
 # postgresql.conf
@@ -77,7 +84,7 @@ postgresql_external_pid_file: "/var/run/{{postgresql_version}}-{{postgresql_clus
 #------------------------------------------------------------------------------
 
 postgresql_listen_addresses:
-  - localhost
+  - '*'
 postgresql_port: 5432
 
 postgresql_max_connections: 100
@@ -93,7 +100,7 @@ postgresql_unix_socket_permissions: '0777' # begin with 0 to use octal notation
 # cluster specific options to be passed to pg_ctl(1).
 postgresql_pg_ctl_options: []
 
-postgresql_bonjour: off # advertise server via Bonjour
+postgresql_bonjour:     off # advertise server via Bonjour
 postgresql_bonjour_name: '' # defaults to the computer name
 
 
