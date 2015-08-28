@@ -17,3 +17,17 @@
   shell: "psql {{item.name}} -c 'CREATE EXTENSION IF NOT EXISTS hstore;'"
   with_items: postgresql_databases
   when: "item.hstore is defined and item.hstore == 'yes'"
+
+# Move clientadmin pg_dump file into place and restore database contents
+#
+# Note - improve this by using variables for the source and dest 
+#        and again when used by restore?
+#
+
+- name: Databases | Move dump file for clientadmin from Mgr1 to db1
+  copy: src=/data/dataStore/postgres/db-clientadmin-ppe-20150827-104116 dest=/var/lib/pgsql/9.4/backups/ owner=postgres
+
+- name: Databases | Restore dump file for clientadmin
+  sudo: yes
+  sudo_user: postgres
+  command: pg_restore -d clientadmin /var/lib/pgsql/9.4/backups/db-clientadmin-ppe-20150827-104116

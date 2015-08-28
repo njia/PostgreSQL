@@ -19,15 +19,27 @@ postgresql_cluster_reset: false          # true or false
 
 
 # List of databases to be created (optional)
-postgresql_databases: []                # Override when needed, usage as shown below
-        #      - name: dbname           # Database
-        #        hstore: yes            # flag to install the hstore extensions on this database (yes/no)
+postgresql_databases:                      # Override when needed, usage as shown below
+  - name: clientadmin         # CAS ClientAdmin Database
+    encoding: "UTF-8"         # Encoding
+    hstore: yes               # flag to install the hstore extensions on this database (yes/no)
+    lc_collate: "en_US.UTF-8"
+    lc_ctype: "en_US.UTF-8"
+    owner: postgres            # Owner
 
 # List of users to be created (optional)
 postgresql_users:                       # Override when needed, usage as shown below
   - name: postgres                      # Username
     pass: password                      # User password
     encrypted: no                       # Is password already encrypted (yes/no)
+
+  - name: casuser                               # Username
+    pass: 'md585172b3312d1324b3061336f614f77dc' # User password
+    encrypted: yes                              # Is password already encrypted (yes/no)
+    
+  - name: casuser_ro                            # Username
+    pass: 'md5a7105e35bc12765aaa536f1416d25e87' # User password
+    encrypted: yes                              # Is password already encrypted (yes/no)
 
 # List of user privileges to be applied (optional)
 postgresql_user_privileges: []          # Override when needed, usage as shown below
