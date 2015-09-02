@@ -27,6 +27,13 @@ postgresql_databases:                      # Override when needed, usage as show
     lc_ctype: "en_US.UTF-8"
     owner: postgres            # Owner
 
+  - name: data_definition      # CAS ClientAdmin Database
+    encoding: "UTF-8"          # Encoding
+    hstore: yes                # flag to install the hstore extensions on this database (yes/no)
+    lc_collate: "en_US.UTF-8"
+    lc_ctype: "en_US.UTF-8"
+    owner: data_definition_user # Owner
+
 # List of users to be created (optional)
 postgresql_users:                       # Override when needed, usage as shown below
   - name: postgres                      # Username
@@ -39,6 +46,10 @@ postgresql_users:                       # Override when needed, usage as shown b
     
   - name: casuser_ro                            # Username
     pass: 'md5a7105e35bc12765aaa536f1416d25e87' # User password
+    encrypted: yes                              # Is password already encrypted (yes/no)
+    
+  - name: data_definition_user                  # Username
+    pass: 'md54285112e388dc3d77fe504966d10a3a8' # User password
     encrypted: yes                              # Is password already encrypted (yes/no)
 
 # List of user privileges to be applied (optional)
